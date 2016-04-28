@@ -41,10 +41,16 @@ client.list_collections.collections.each do |collection|
     File.write(
       File.join(subdir, "#{base}-entities.json"),
       JSON.pretty_generate(item.entities))
+
     raise('Expected exactly one audio file per item') unless item.audio_files.size == 1
-    File.write(
-      File.join(subdir, "#{base}-transcript.json"),
-      JSON.pretty_generate(item.audio_files.first.transcript))
+    audio_file = item.audio_files.first
+    if audio_file.transcript
+      File.write(
+        File.join(subdir, "#{base}-transcript.json"),
+        JSON.pretty_generate(audio_file.transcript))
+    else
+      puts '(no transcript)'
+    end
   end
 
   puts
